@@ -7,13 +7,30 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
-
     // controls the delay between each tick in ms
     private final int DELAY = 25;
     // controls the size of the board
-    public static final int TILE_SIZE = 50;
-    public static final int ROWS = 12;
-    public static final int COLUMNS = 18;
+    public static final int TILE_SIZE = 25;
+    public static final int ROWS = 15;
+    public static final int COLUMNS = 15;
+
+    // 0 - path, 1 - wall
+    public static final int MAP [] [] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
+                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
+                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
+                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+                                         {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1},
+                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+                                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
     // controls how many coins appear on the board
     public static final int NUM_COINS = 5;
     // suppress serialization warning
@@ -96,19 +113,20 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     private void drawBackground(Graphics g) {
         // draw a checkered background
-        g.setColor(new Color(214, 214, 214));
+
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
-                // only color every other tile
-                if ((row + col) % 2 == 1) {
-                    // draw a square tile at the current row/column position
-                    g.fillRect(
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE
-                    );
-                }
+
+                if (MAP[row][col] == 0) g.setColor(new Color(30, 86, 211));
+                else if (MAP[row][col] == 1) g.setColor(new Color(238, 211, 45));
+                // draw a square tile at the current row/column position
+                g.fillRect(
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE
+                );
+
             }
         }
     }
@@ -148,14 +166,23 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private ArrayList populateCoins() {
         ArrayList coinList = new ArrayList<>();
         Random rand = new Random();
+        int coinsToPlace = NUM_COINS;
 
         // create the given number of coins in random positions on the board.
         // note that there is not check here to prevent two coins from occupying the same
         // spot, nor to prevent coins from spawning in the same spot as the player
-        for (int i = 0; i < NUM_COINS; i++) {
+//        for (int i = 0; i < NUM_COINS; i++) {
+//            int coinX = rand.nextInt(COLUMNS);
+//            int coinY = rand.nextInt(ROWS);
+//            coinList.add(new Coin(coinX, coinY));
+//        }
+
+        while (coinsToPlace > 0){
             int coinX = rand.nextInt(COLUMNS);
             int coinY = rand.nextInt(ROWS);
+            if (Board.MAP[coinX][coinY] == 1) continue;
             coinList.add(new Coin(coinX, coinY));
+            --coinsToPlace;
         }
 
         return coinList;

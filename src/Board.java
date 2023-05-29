@@ -5,11 +5,16 @@ import src.ghost.RandomGhost;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
+
     // controls the delay between each tick in ms
     public static final int DELAY = 25;
     // controls the size of the board
@@ -44,6 +49,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private Player player;
     private ArrayList<Coin> coins;
     private ArrayList<Ghost> ghosts;
+    private boolean is_gameOver;
 
     public Board() {
         setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
@@ -77,6 +83,12 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void paintComponent(Graphics g) {
+
+        if (is_gameOver){
+            drawGameOver(g);
+            return;
+        }
+
         super.paintComponent(g);
         // when calling g.drawImage() we can use "this" for the ImageObserver
         // because Component implements the ImageObserver interface, and JPanel
@@ -106,6 +118,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         // react to key down events
+
         player.keyPressed(e);
     }
 
@@ -166,6 +179,16 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         g2d.drawString(text, x, y);
     }
 
+    private void drawGameOver(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        String text = String.format("GAME OVER\n final score: %d", player.getScore());
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(0, 0, TILE_SIZE*COLUMNS, TILE_SIZE*ROWS);
+        g.setColor(new Color(173, 33, 33));
+        g.setFont(new Font("Lato", Font.BOLD, 20));
+        g.drawString(text, TILE_SIZE*1 ,TILE_SIZE*1);
+    }
+
     private ArrayList<Coin> populateCoins() {
         ArrayList<Coin> coinList = new ArrayList<Coin>();
         Random rand = new Random();
@@ -204,9 +227,15 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             if (ghost.getPos().equals(player.getPos())){
                 player.setPos(new Point(0, 0));
                 player.addScore(-REVIVAL_COST);
-                if (player.getScore() < 0) System.out.println("Przegrales");
+                if (player.getScore() < 0) gameOver();
             }
         }
+    }
+
+    private void gameOver(){
+        timer.stop();
+        is_gameOver = true;
+        repaint();
     }
 
 }

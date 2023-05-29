@@ -7,6 +7,7 @@ import java.awt.image.ImageObserver;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Player {
@@ -60,21 +61,17 @@ public class Player {
         // one whole tile for this input
         if (key == KeyEvent.VK_UP) {
             lastMove.y = -1;
-            pos.translate(lastMove.x, lastMove.y);
         }
         if (key == KeyEvent.VK_RIGHT) {
             lastMove.x = 1;
-            pos.translate(lastMove.x, lastMove.y);
         }
         if (key == KeyEvent.VK_DOWN) {
             lastMove.y = 1;
-            pos.translate(lastMove.x, lastMove.y);
         }
         if (key == KeyEvent.VK_LEFT) {
             lastMove.x = -1;
-            pos.translate(lastMove.x, lastMove.y);
         }
-
+        pos.translate(lastMove.x, lastMove.y);
         checkCollision(lastMove);
     }
 
@@ -94,13 +91,12 @@ public class Player {
 
     public void tick() {
         // this gets called once every tick, before the repainting process happens.
-        // so we can do anything needed in here to update the state of the player.
 
 
     }
 
-    public String getScore() {
-        return String.valueOf(score);
+    public int getScore() {
+        return score;
     }
 
     public void addScore(int amount) {
@@ -109,6 +105,10 @@ public class Player {
 
     public Point getPos() {
         return pos;
+    }
+
+    public void setPos(Point newPos) {
+        pos = newPos;
     }
 
 }

@@ -14,13 +14,14 @@ public class Coin {
     private BufferedImage image;
     // current position of the coin on the board grid
     private Point pos;
+    private int value;
 
-    public Coin(int x, int y) {
+    public Coin(int x, int y, int value) {
         // load the assets
         loadImage();
-
         // initialize the state
         pos = new Point(x, y);
+        this.value = value;
     }
 
     private void loadImage() {
@@ -49,5 +50,6 @@ public class Coin {
     public Point getPos() {
         return pos;
     }
+    public int getValue() { return value; }
 
 }

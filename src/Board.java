@@ -1,5 +1,8 @@
 package src;
 
+import src.ghost.Ghost;
+import src.ghost.RandomGhost;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -8,7 +11,7 @@ import javax.swing.*;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
     // controls the delay between each tick in ms
-    private final int DELAY = 25;
+    public static final int DELAY = 25;
     // controls the size of the board
     public static final int TILE_SIZE = 25;
     public static final int ROWS = 15;
@@ -33,28 +36,26 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     // controls how many coins appear on the board
     public static final int NUM_COINS = 5;
+    public static final int REVIVAL_COST = 500;
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
 
-    // keep a reference to the timer object that triggers actionPerformed() in
-    // case we need access to it in another method
     private Timer timer;
-    // objects that appear on the game board
     private Player player;
     private ArrayList<Coin> coins;
+    private ArrayList<Ghost> ghosts;
 
     public Board() {
-        // set the game board size
         setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
-        // set the game board background color
-        setBackground(new Color(232, 232, 232));
-
         // initialize the game state
         player = new Player();
+
+        ghosts = new ArrayList<Ghost>();
+        ghosts.add(new RandomGhost("assets/ghost.png", 1, new Point(8, 8)));
+
         coins = populateCoins();
 
-        // this timer will call the actionPerformed() method every DELAY ms
-        timer = new Timer(DELAY, this);
+        timer = new Timer(DELAY, this); // call the actionPerformed() method every DELAY ms
         timer.start();
     }
 
@@ -64,8 +65,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         // use this space to update the state of your game or animation
         // before the graphics are redrawn.
 
-        // prevent the player from disappearing off the board
-        player.tick();
+        checkEntityCollision();
 
         // give the player points for collecting coins
         collectCoins();
@@ -88,6 +88,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         drawScore(g);
         for (Coin coin : coins) {
             coin.draw(g, this);
+        }
+        for (Ghost ghost : ghosts){
+            ghost.draw(g, this);
         }
         player.draw(g, this);
 
@@ -133,7 +136,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     private void drawScore(Graphics g) {
         // set the text to be displayed
-        String text = "$" + player.getScore();
+        String text = String.format("$%d", player.getScore());
         // we need to cast the Graphics to Graphics2D to draw nicer text
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(
@@ -163,44 +166,47 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         g2d.drawString(text, x, y);
     }
 
-    private ArrayList populateCoins() {
-        ArrayList coinList = new ArrayList<>();
+    private ArrayList<Coin> populateCoins() {
+        ArrayList<Coin> coinList = new ArrayList<Coin>();
         Random rand = new Random();
         int coinsToPlace = NUM_COINS;
-
-        // create the given number of coins in random positions on the board.
-        // note that there is not check here to prevent two coins from occupying the same
-        // spot, nor to prevent coins from spawning in the same spot as the player
-//        for (int i = 0; i < NUM_COINS; i++) {
-//            int coinX = rand.nextInt(COLUMNS);
-//            int coinY = rand.nextInt(ROWS);
-//            coinList.add(new Coin(coinX, coinY));
-//        }
 
         while (coinsToPlace > 0){
             int coinX = rand.nextInt(COLUMNS);
             int coinY = rand.nextInt(ROWS);
-            if (Board.MAP[coinX][coinY] == 1) continue;
-            coinList.add(new Coin(coinX, coinY));
+            if (Board.MAP[coinY][coinX] == 1) continue;
+            else coinList.add(new Coin(coinX, coinY, 100));
             --coinsToPlace;
         }
-
         return coinList;
     }
 
     private void collectCoins() {
         // allow player to pickup coins
-        ArrayList collectedCoins = new ArrayList<>();
+        ArrayList<Coin> collectedCoins = new ArrayList<>();
         for (Coin coin : coins) {
-            // if the player is on the same tile as a coin, collect it
             if (player.getPos().equals(coin.getPos())) {
-                // give the player some points for picking this up
-                player.addScore(100);
+                player.addScore(coin.getValue());
                 collectedCoins.add(coin);
             }
         }
         // remove collected coins from the board
         coins.removeAll(collectedCoins);
+
+        if (coins.size() < 1) coins = populateCoins();
+
+    }
+
+    //Collisions between entities (ghost and player) are handled by the board because it has the access
+    //to both player and ghost pos.
+    private void checkEntityCollision(){
+        for (Ghost ghost : ghosts){
+            if (ghost.getPos().equals(player.getPos())){
+                player.setPos(new Point(0, 0));
+                player.addScore(-REVIVAL_COST);
+                if (player.getScore() < 0) System.out.println("Przegrales");
+            }
+        }
     }
 
 }

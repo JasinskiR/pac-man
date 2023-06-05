@@ -57,7 +57,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         player = new Player();
 
         ghosts = new ArrayList<Ghost>();
-        ghosts.add(new RandomGhost("assets/ghost.png", 1, new Point(8, 8)));
+        ghosts.add(new RandomGhost("assets/ghost_pink.png", 1, new Point(8, 8)));
 
         coins = populateCoins();
 
@@ -133,8 +133,8 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
 
-                if (MAP[row][col] == 0) g.setColor(new Color(30, 86, 211));
-                else if (MAP[row][col] == 1) g.setColor(new Color(238, 211, 45));
+                if (MAP[row][col] == 0) g.setColor(new Color(10, 10, 35));
+                else if (MAP[row][col] == 1) g.setColor(new Color(36, 75, 161));
                 // draw a square tile at the current row/column position
                 g.fillRect(
                         col * TILE_SIZE,

@@ -15,12 +15,12 @@ public abstract class Ghost {
     protected Point pos;
     protected int tickCounter; //counts the number of ticks since the last move.
     //it the number of ticks is at least equal to set speed, make a move and reset the counter.
-    protected int speed; //specifies how fast the ghost will move.
+    protected float speed; //specifies how fast the ghost will move.
     //LOWER speed - ghost moves FASTER
 
     protected static Point moveVector;
 
-    public Ghost(String imagePath, int speed, Point startPos){
+    public Ghost(String imagePath, float speed, Point startPos){
         setSprite(imagePath);
         setSpeed(speed);
         pos = startPos;
@@ -39,7 +39,7 @@ public abstract class Ghost {
         }
     }
 
-    protected void setSpeed(int speed) {
+    protected void setSpeed(float speed) {
         this.speed = speed;
     }
 

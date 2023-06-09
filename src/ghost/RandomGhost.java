@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class RandomGhost extends Ghost {
     private static int moveDuration;
-    public RandomGhost(String imagePath, int speed, Point startPos) {
+    public RandomGhost(String imagePath, float speed, Point startPos) {
         super(imagePath, speed, startPos);
     }
 

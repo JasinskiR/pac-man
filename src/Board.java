@@ -2,6 +2,7 @@ package src;
 
 import src.ghost.Ghost;
 import src.ghost.RandomGhost;
+import src.ghost.DijkstraGhost;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,7 +17,7 @@ import javax.swing.*;
 public class Board extends JPanel implements ActionListener, KeyListener {
 
     // controls the delay between each tick in ms
-    public static final int DELAY = 25;
+    public static final int DELAY = 50;
     // controls the size of the board
     public static final int TILE_SIZE = 25;
     public static final int ROWS = 15;
@@ -46,7 +47,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private static final long serialVersionUID = 490905409104883233L;
 
     private Timer timer;
-    private Player player;
+    private static Player player;
     private ArrayList<Coin> coins;
     private ArrayList<Ghost> ghosts;
     private boolean is_gameOver;
@@ -57,14 +58,17 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         player = new Player();
 
         ghosts = new ArrayList<Ghost>();
-        ghosts.add(new RandomGhost("assets/ghost_pink.png", 1, new Point(8, 8)));
+        ghosts.add(new DijkstraGhost("assets/ghost_pink.png", 0.01f, new Point(8, 8)));
+        ghosts.add(new RandomGhost("assets/ghost_pink.png", 0.01f, new Point(8, 8)));
 
         coins = populateCoins();
 
         timer = new Timer(DELAY, this); // call the actionPerformed() method every DELAY ms
         timer.start();
     }
-
+    public static Player getPlayer() {
+        return player;
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         // this method is called by the timer every DELAY ms.

@@ -1,17 +1,11 @@
 package src;
 
-import src.ghost.Ghost;
-import src.ghost.RandomGhost;
-import src.ghost.DijkstraGhost;
+import src.Entities.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
@@ -49,17 +43,16 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private Timer timer;
     private static Player player;
     private ArrayList<Coin> coins;
-    private ArrayList<Ghost> ghosts;
+    private ArrayList<MovingEntity> ghosts;
     private boolean is_gameOver;
 
     public Board() {
         setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
         // initialize the game state
-        player = new Player();
-
-        ghosts = new ArrayList<Ghost>();
-        ghosts.add(new DijkstraGhost("assets/ghost_pink.png", 0.01f, new Point(8, 8)));
-        ghosts.add(new RandomGhost("assets/ghost_pink.png", 0.01f, new Point(8, 8)));
+        player = new Player(100.0f, new Point(0,0));
+        ghosts = new ArrayList<MovingEntity>();
+        ghosts.add(new DijkstraGhost("assets/ghost_green.png", 200.0f, new Point(8, 8)));
+        ghosts.add(new RandomGhost("assets/ghost_pink.png", 500.0f, new Point(8, 8)));
 
         coins = populateCoins();
 
@@ -105,7 +98,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         for (Coin coin : coins) {
             coin.draw(g, this);
         }
-        for (Ghost ghost : ghosts){
+        for (MovingEntity ghost : ghosts){
             ghost.draw(g, this);
         }
         player.draw(g, this);
@@ -227,7 +220,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     //Collisions between entities (ghost and player) are handled by the board because it has the access
     //to both player and ghost pos.
     private void checkEntityCollision(){
-        for (Ghost ghost : ghosts){
+        for (MovingEntity ghost : ghosts){
             if (ghost.getPos().equals(player.getPos())){
                 player.setPos(new Point(0, 0));
                 player.addScore(-REVIVAL_COST);
@@ -241,5 +234,6 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         is_gameOver = true;
         repaint();
     }
+
 
 }

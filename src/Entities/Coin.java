@@ -1,4 +1,6 @@
-package src;
+package src.Entities;
+
+import src.Board;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

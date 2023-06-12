@@ -33,17 +33,43 @@ public abstract class MovingEntity {
             System.out.println("Error opening image file: " + exc.getMessage());
         }
     }
-    protected void checkWallCollision(Point moveVector){
-        if (pos.x < 0) pos.x = 0;
-        else if (pos.x >= Board.COLUMNS) pos.x = Board.COLUMNS - 1;
+    protected boolean checkWallCollision(Point moveVector){
+        boolean colided = false;
+        if (pos.x < 0) {
+            pos.x = 0; colided = true;
+        }
+        else if (pos.x >= Board.COLUMNS) {
+            pos.x = Board.COLUMNS - 1; colided = true;
+        }
 
-        if (pos.y < 0) pos.y = 0;
-        else if (pos.y >= Board.ROWS) pos.y = Board.ROWS - 1;
+        if (pos.y < 0) {
+            pos.y = 0; colided = true;
+        }
+        else if (pos.y >= Board.ROWS) {
+            pos.y = Board.ROWS - 1; colided = true;
+        }
 
         if (Board.MAP[pos.y][pos.x] == 1){
             pos.x = pos.x - moveVector.x;
             pos.y = pos.y - moveVector.y;
+            colided = true;
         }
+        return colided;
+    }
+
+    //takes a set of coordinates and check if theres a wall/border there.
+    protected  boolean checkWallCollisionAbsolute(Point position){
+        boolean colided = false;
+
+        if (position.x < 0) colided = true;
+        else if (position.x >= Board.COLUMNS) colided = true;
+
+        if (position.y < 0) colided = true;
+        else if (position.y >= Board.ROWS) colided = true;
+
+        if (Board.MAP[position.y][position.x] == 1) colided = true;
+
+        return colided;
     }
     public void draw(Graphics g, ImageObserver observer){
         if (tickCounter*Board.DELAY >= speed){

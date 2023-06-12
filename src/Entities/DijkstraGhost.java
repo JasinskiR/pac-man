@@ -40,7 +40,7 @@ public class DijkstraGhost extends MovingEntity {
         direction.y = nextPos.y - pos.y;
 
         pos.setLocation(nextPos);
-        System.out.println(String.format("pos: %d  %d", pos.x, pos.y));
+//        System.out.println(String.format("pos: %d  %d", pos.x, pos.y));
         checkWallCollision(direction);
 
     }

@@ -51,6 +51,8 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         // initialize the game state
         player = new Player(100.0f, new Point(0,0));
         ghosts = new ArrayList<MovingEntity>();
+
+        ghosts.add(new WallhuggerGhost("assets/ghost_yellow.png", 200.0f, new Point(4, 4)));
         ghosts.add(new DijkstraGhost("assets/ghost_green.png", 200.0f, new Point(8, 8)));
         ghosts.add(new RandomGhost("assets/ghost_pink.png", 500.0f, new Point(8, 8)));
 

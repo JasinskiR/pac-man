@@ -22,28 +22,34 @@ public class DijkstraGhost extends MovingEntity {
 
     @Override
     protected void Move() {
-        if (shortestPath.isEmpty()) {
-            calculateShortestPath();
-            if (shortestPath.isEmpty()) {
-                return; // No valid path found
+        if (!pathQueue.isEmpty()) {
+            Point nextPos = pathQueue.peek();
+            direction.x = nextPos.x - pos.x;
+            direction.y = nextPos.y - pos.y;
+
+            // Check for collision before updating position
+            if (!checkWallCollision(direction)) {
+                // Update position if there is no collision
+                pos.setLocation(nextPos);
             }
-            pathQueue.addAll(shortestPath);
-            pathQueue.poll(); // Skip the first position (current position)
+
+            if (pos.equals(nextPos)) {
+                pathQueue.poll(); // Remove the current position from the queue
+            }
         }
 
-        if (pathQueue.isEmpty()) {
-            return; // No more moves in the path
+        calculateShortestPath();
+        if (shortestPath.isEmpty()) {
+            return; // No valid path found
         }
 
-        Point nextPos = pathQueue.poll();
-        direction.x = nextPos.x - pos.x;
-        direction.y = nextPos.y - pos.y;
-
-        pos.setLocation(nextPos);
-//        System.out.println(String.format("pos: %d  %d", pos.x, pos.y));
-        checkWallCollision(direction);
-
+        pathQueue.clear();
+        pathQueue.addAll(shortestPath);
+        pathQueue.poll(); // Skip the first position (current position)
     }
+
+
+
 
     private void calculateShortestPath() {
         int[][] distance = new int[Board.ROWS][Board.COLUMNS];
@@ -75,7 +81,8 @@ public class DijkstraGhost extends MovingEntity {
                 int newY = current.y + dy;
 
                 if (newX >= 0 && newX < Board.COLUMNS && newY >= 0 && newY < Board.ROWS &&
-                        Board.MAP[newY][newX] == 0 && distance[newY][newX] == Integer.MAX_VALUE) {
+                        Board.MAP[newY][newX] == 0 &&
+                        distance[newY][newX] == Integer.MAX_VALUE) {
                     distance[newY][newX] = distance[current.y][current.x] + 1;
                     previous[newY][newX] = current;
                     queue.offer(new Point(newX, newY));
@@ -97,3 +104,4 @@ public class DijkstraGhost extends MovingEntity {
         }
     }
 }
+

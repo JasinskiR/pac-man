@@ -1,12 +1,16 @@
 package src;
 
 import src.Entities.*;
-
+import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.*;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
 
@@ -84,7 +88,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     public void paintComponent(Graphics g) {
 
         if (is_gameOver){
-            drawGameOver(g);
+            drawGameOver(g, player.getScore());
             return;
         }
 
@@ -178,15 +182,160 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         g2d.drawString(text, x, y);
     }
 
-    private void drawGameOver(Graphics g){
+    private void drawGameOver(Graphics g, int score) {
         Graphics2D g2d = (Graphics2D) g;
-        String text = String.format("GAME OVER\n final score: %d", player.getScore());
+        String text = String.format("GAME OVER\nFinal Score: %d", score);
         g.setColor(new Color(0, 0, 0));
-        g.fillRect(0, 0, TILE_SIZE*COLUMNS, TILE_SIZE*ROWS);
+        g.fillRect(0, 0, TILE_SIZE * COLUMNS, TILE_SIZE * ROWS);
         g.setColor(new Color(173, 33, 33));
         g.setFont(new Font("Lato", Font.BOLD, 20));
-        g.drawString(text, TILE_SIZE*1 ,TILE_SIZE*1);
+        g.drawString(text, TILE_SIZE * 1, TILE_SIZE * 1);
+        showLeaderboardForm(score);
+
+        displayLeaderboard(g);
     }
+
+    private void showLeaderboardForm(int score) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Leaderboard");
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setModal(true);
+
+        JTextField playerNameField = new JTextField();
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(e -> {
+            String playerName = playerNameField.getText();
+            if (!playerName.isEmpty()) {
+                if (isPlayerInLeaderboard(playerName)) {
+                    JDialog error = new JDialog();
+                    // Player already exists in the leaderboard
+                    JOptionPane.showMessageDialog(error, "Username already exists. \n" +
+                            "Please choose a different username.", "Leaderboard", JOptionPane.ERROR_MESSAGE);
+                    error.dispose();
+                } else {
+                    updateLeaderboard(playerName, score);
+                    dialog.dispose(); // Close the dialog
+                }
+            }
+        });
+
+        JPanel contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(new JLabel("Enter your name:"), BorderLayout.NORTH);
+        contentPane.add(playerNameField, BorderLayout.CENTER);
+        contentPane.add(okButton, BorderLayout.SOUTH);
+
+        dialog.setContentPane(contentPane);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null); // Center the dialog on the screen
+        dialog.setVisible(true);
+    }
+
+    private boolean isPlayerInLeaderboard(String playerName) {
+        try {
+            BufferedReader leaderboardReader = new BufferedReader(new FileReader("leaderboard.txt"));
+            String line;
+            while ((line = leaderboardReader.readLine()) != null) {
+                String storedPlayerName = line.split(": ")[0];
+                if (storedPlayerName.equals(playerName)) {
+                    leaderboardReader.close();
+                    return true;
+                }
+            }
+            leaderboardReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void updateLeaderboard(String playerName, int score) {
+        List<String> leaderboard = new ArrayList<>();
+
+        try {
+            // Read the current leaderboard
+            BufferedReader leaderboardReader = new BufferedReader(new FileReader("leaderboard.txt"));
+            String line;
+            while ((line = leaderboardReader.readLine()) != null) {
+                leaderboard.add(line);
+            }
+            leaderboardReader.close();
+
+            // Add the new score
+            leaderboard.add(playerName + ": " + score);
+
+            // Sort the leaderboard in descending order by score
+            leaderboard.sort((s1, s2) -> {
+                int score1 = Integer.parseInt(s1.split(": ")[1]);
+                int score2 = Integer.parseInt(s2.split(": ")[1]);
+                return Integer.compare(score2, score1);
+            });
+
+            // Update the leaderboard file
+            FileWriter leaderboardWriter = new FileWriter("leaderboard.txt");
+            for (String entry : leaderboard) {
+                leaderboardWriter.write(entry + "\n");
+            }
+            leaderboardWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void displayLeaderboard(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(new Color(0, 0, 0));
+        g2d.fillRect(0, 0, TILE_SIZE * COLUMNS, TILE_SIZE * ROWS);
+        g2d.setColor(new Color(173, 33, 33));
+        g2d.setFont(new Font("Lato", Font.BOLD, 20));
+
+        try {
+            BufferedReader leaderboardReader = new BufferedReader(new FileReader("leaderboard.txt"));
+            List<String> leaderboardLines = new ArrayList<>();
+            String line;
+            while ((line = leaderboardReader.readLine()) != null) {
+                leaderboardLines.add(line);
+            }
+            leaderboardReader.close();
+
+            leaderboardLines.sort((s1, s2) -> {
+                int score1 = Integer.parseInt(s1.split(": ")[1]);
+                int score2 = Integer.parseInt(s2.split(": ")[1]);
+                return Integer.compare(score2, score1);
+            });
+
+            int leaderboardSize = Math.min(5, leaderboardLines.size());
+            int leaderboardHeight = leaderboardSize * TILE_SIZE;
+            int startY = (ROWS * TILE_SIZE - leaderboardHeight) / 2;
+
+            // Draw "GAME OVER" title
+            String gameOverText = "GAME OVER";
+            g2d.setFont(new Font("Lato", Font.BOLD, 40));
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+            int gameOverWidth = fontMetrics.stringWidth(gameOverText);
+            int gameOverX = (COLUMNS * TILE_SIZE - gameOverWidth) / 2;
+            int gameOverY = startY - TILE_SIZE;
+            g2d.drawString(gameOverText, gameOverX, gameOverY);
+
+            // Draw leaderboard entries
+            g2d.setFont(new Font("Lato", Font.BOLD, 20));
+            int position = 1;
+            FontMetrics recordMetrics = g2d.getFontMetrics();
+            for (int i = 0; i < leaderboardSize; i++) {
+                String entry = leaderboardLines.get(i);
+                String record = String.format("%d. %s", position, entry);
+                int recordWidth = recordMetrics.stringWidth(record);
+                int recordX = (COLUMNS * TILE_SIZE) / 2 - (recordWidth / 2); //
+                // Calculate x-coordinate
+                int recordY = startY + (i + 1) * TILE_SIZE;
+                g2d.drawString(record, recordX, recordY);
+                position++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private ArrayList<Coin> populateCoins() {
         ArrayList<Coin> coinList = new ArrayList<Coin>();
@@ -225,8 +374,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         for (MovingEntity ghost : ghosts){
             if (ghost.getPos().equals(player.getPos())){
                 player.setPos(new Point(0, 0));
-                player.addScore(-REVIVAL_COST);
-                if (player.getScore() < 0) gameOver();
+                gameOver();
             }
         }
     }

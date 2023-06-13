@@ -184,14 +184,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     private void drawGameOver(Graphics g, int score) {
         Graphics2D g2d = (Graphics2D) g;
-        String text = String.format("GAME OVER\nFinal Score: %d", score);
-        g.setColor(new Color(0, 0, 0));
-        g.fillRect(0, 0, TILE_SIZE * COLUMNS, TILE_SIZE * ROWS);
-        g.setColor(new Color(173, 33, 33));
-        g.setFont(new Font("Lato", Font.BOLD, 20));
-        g.drawString(text, TILE_SIZE * 1, TILE_SIZE * 1);
         showLeaderboardForm(score);
-
         displayLeaderboard(g);
     }
 
@@ -214,7 +207,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                     error.dispose();
                 } else {
                     updateLeaderboard(playerName, score);
-                    dialog.dispose(); // Close the dialog
+                    dialog.dispose();
                 }
             }
         });
@@ -227,7 +220,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
         dialog.setContentPane(contentPane);
         dialog.pack();
-        dialog.setLocationRelativeTo(null); // Center the dialog on the screen
+        dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
 
@@ -331,6 +324,18 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                 g2d.drawString(record, recordX, recordY);
                 position++;
             }
+
+            // Add a button for starting again
+            JButton startAgainButton = new JButton("Start Again");
+            startAgainButton.setForeground(new Color(173, 33, 33));
+            startAgainButton.setBackground(new Color(255, 255, 255));
+            startAgainButton.setFocusPainted(false);
+            startAgainButton.setFont(new Font("Lato", Font.BOLD, 16));
+            startAgainButton.setBorder(BorderFactory.createLineBorder(new Color(173, 33, 33), 2));
+            startAgainButton.setBounds((COLUMNS * TILE_SIZE - 120) / 2, startY + leaderboardHeight + 20, 120, 30);
+            //startAgainButton.addActionListener(e -> startGameAgain());
+            startAgainButton.setVisible(true);
+            add(startAgainButton);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -384,6 +389,4 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         is_gameOver = true;
         repaint();
     }
-
-
 }

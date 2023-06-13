@@ -13,9 +13,11 @@ class App {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // create the jpanel to draw on.
         // this also initializes the game loop
-        Board board = new Board();
+        WelcomeScreen welcome = new WelcomeScreen();
+        // board = new Board();
         // add the jpanel to the window
-        window.add(board);
+        window.add(welcome);
+        Board board = null;
         // pass keyboard inputs to the jpanel
         window.addKeyListener(board);
         // don't allow the user to resize the window
@@ -30,6 +32,33 @@ class App {
 
     }
 
+    private static void initWelcomeWindow() {
+        JFrame welcomeFrame = new JFrame("Pacman");
+        welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        welcomeFrame.setResizable(false);
+
+        WelcomeScreen welcomeScreen = new WelcomeScreen();
+        welcomeFrame.add(welcomeScreen);
+
+        welcomeFrame.pack();
+        welcomeFrame.setLocationRelativeTo(null);
+        welcomeFrame.setVisible(true);
+    }
+
+    static void initBoardWindow() {
+        JFrame boardFrame = new JFrame("Pacman");
+        boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        boardFrame.setResizable(false);
+
+        Board board = new Board();
+        boardFrame.add(board);
+        boardFrame.addKeyListener(board);
+
+        boardFrame.pack();
+        boardFrame.setLocationRelativeTo(null);
+        boardFrame.setVisible(true);
+    }
+
     public static void main(String[] args) {
         // invokeLater() is used here to prevent our graphics processing from
         // blocking the GUI. https://stackoverflow.com/a/22534931/4655368
@@ -38,7 +67,7 @@ class App {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                initWindow();
+                initWelcomeWindow();
             }
         });
     }

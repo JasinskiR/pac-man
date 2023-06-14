@@ -11,6 +11,7 @@ import java.util.Random;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import static src.App.initLeaderboardWindow;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
 
@@ -50,6 +51,8 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private ArrayList<MovingEntity> ghosts;
     private boolean is_gameOver;
 
+    private String leaderboardPath;
+
     public Board() {
         setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
         // initialize the game state
@@ -58,7 +61,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
         ghosts.add(new WallhuggerGhost("assets/ghost_yellow.png", 200.0f, new Point(4, 4)));
         ghosts.add(new DijkstraGhost("assets/ghost_green.png", 200.0f, new Point(8, 8)));
-        ghosts.add(new RandomGhost("assets/ghost_pink.png", 500.0f, new Point(8, 8)));
+        ghosts.add(new RandomGhost("assets/ghost_pink.png", 100.0f, new Point(8, 8)));
+
+        leaderboardPath = "src/leaderboard.txt";
 
         coins = populateCoins();
 
@@ -73,12 +78,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         // this method is called by the timer every DELAY ms.
         // use this space to update the state of your game or animation
         // before the graphics are redrawn.
-
         checkEntityCollision();
-
         // give the player points for collecting coins
         collectCoins();
-
         // calling repaint() will trigger paintComponent() to run again,
         // which will refresh/redraw the graphics.
         repaint();
@@ -183,9 +185,11 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     }
 
     private void drawGameOver(Graphics g, int score) {
-        Graphics2D g2d = (Graphics2D) g;
         showLeaderboardForm(score);
-        displayLeaderboard(g);
+//        displayLeaderboard(g);
+        JFrame boardFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        boardFrame.dispose();
+        initLeaderboardWindow();
     }
 
     private void showLeaderboardForm(int score) {
@@ -226,7 +230,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     private boolean isPlayerInLeaderboard(String playerName) {
         try {
-            BufferedReader leaderboardReader = new BufferedReader(new FileReader("leaderboard.txt"));
+            BufferedReader leaderboardReader = new BufferedReader(new FileReader(leaderboardPath));
             String line;
             while ((line = leaderboardReader.readLine()) != null) {
                 String storedPlayerName = line.split(": ")[0];
@@ -247,7 +251,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
         try {
             // Read the current leaderboard
-            BufferedReader leaderboardReader = new BufferedReader(new FileReader("leaderboard.txt"));
+            BufferedReader leaderboardReader = new BufferedReader(new FileReader(leaderboardPath));
             String line;
             while ((line = leaderboardReader.readLine()) != null) {
                 leaderboard.add(line);
@@ -265,7 +269,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             });
 
             // Update the leaderboard file
-            FileWriter leaderboardWriter = new FileWriter("leaderboard.txt");
+            FileWriter leaderboardWriter = new FileWriter(leaderboardPath);
             for (String entry : leaderboard) {
                 leaderboardWriter.write(entry + "\n");
             }
@@ -275,6 +279,10 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     *
+     * Leaderboard display is now handled by initLeaderboardWindow
+     */
     private void displayLeaderboard(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(new Color(0, 0, 0));
@@ -283,7 +291,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         g2d.setFont(new Font("Lato", Font.BOLD, 20));
 
         try {
-            BufferedReader leaderboardReader = new BufferedReader(new FileReader("leaderboard.txt"));
+            BufferedReader leaderboardReader = new BufferedReader(new FileReader(leaderboardPath));
             List<String> leaderboardLines = new ArrayList<>();
             String line;
             while ((line = leaderboardReader.readLine()) != null) {
@@ -327,6 +335,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
             // Add a button for starting again
             JButton startAgainButton = new JButton("Start Again");
+//            startAgainButton.addActionListener(this);
+//            startAgainButton.setActionCommand("start_over");
+
             startAgainButton.setForeground(new Color(173, 33, 33));
             startAgainButton.setBackground(new Color(255, 255, 255));
             startAgainButton.setFocusPainted(false);

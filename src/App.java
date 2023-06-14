@@ -59,6 +59,19 @@ class App {
         boardFrame.setVisible(true);
     }
 
+    static void initLeaderboardWindow(){
+        JFrame leaderboardFrame = new JFrame("Leaderboard");
+        leaderboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        leaderboardFrame.setResizable(false);
+
+        Leaderboard leaderboard = new Leaderboard();
+        leaderboardFrame.add(leaderboard);
+
+        leaderboardFrame.pack();
+        leaderboardFrame.setLocationRelativeTo(null);
+        leaderboardFrame.setVisible(true);
+    }
+
     public static void main(String[] args) {
         // invokeLater() is used here to prevent our graphics processing from
         // blocking the GUI. https://stackoverflow.com/a/22534931/4655368

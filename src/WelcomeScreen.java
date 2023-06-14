@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static src.App.initBoardWindow;
+import static src.App.initLeaderboardWindow;
 
 class WelcomeScreen extends JPanel implements ActionListener {
   private JButton startButton;
@@ -88,6 +89,10 @@ class WelcomeScreen extends JPanel implements ActionListener {
       // Open the board window
       initBoardWindow();
     } else if (e.getSource() == leaderboardButton) {
+      JFrame welcomeFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+      welcomeFrame.dispose();
+
+      initLeaderboardWindow();
 
     } else if (e.getSource() == exitButton) {
       System.exit(0);

@@ -10,6 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+/**
+ * It would make a lot of sense to create a base abstract class StaticEntity, but since Coin would be its only child,
+ * this seems redundant
+ */
 public class Coin {
 
     // image that represents the coin's position on the board

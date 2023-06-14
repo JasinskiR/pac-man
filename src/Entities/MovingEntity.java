@@ -25,6 +25,10 @@ public abstract class MovingEntity {
         this.direction = new Point();
     }
     protected abstract void Move();
+
+    public class moveThreaded extends Thread{
+        public void run(){ Move();}
+    }
     protected void setSprite(String imagePath){
         try {
             sprite = ImageIO.read(new File(imagePath));
@@ -73,7 +77,9 @@ public abstract class MovingEntity {
     }
     public void draw(Graphics g, ImageObserver observer){
         if (tickCounter*Board.DELAY >= speed){
-            Move();
+//            Move();
+            moveThreaded moveTh = new moveThreaded();
+            moveTh.start();
             tickCounter = 1;
         }
         else{

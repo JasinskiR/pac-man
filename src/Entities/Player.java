@@ -17,7 +17,7 @@ public class Player extends MovingEntity {
     // keep track of the player's score
     private int score;
 
-    public Player(float speed, Point startPos) {
+    public Player(float speed, Point startPos) { //what if player had a list of ghosts to detect?
         super(speed, startPos);
         loadImage();
         score = 0;

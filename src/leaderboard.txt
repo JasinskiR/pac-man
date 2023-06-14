@@ -1,8 +1,12 @@
 maslo: 500
+kalosze: 300
 aaa: 200
 uuuh: 200
+kato: 200
+pi7tkfjh: 200
 gg: 100
 dgfdf: 100
+p97tfkhj: 100
 krowa: 0
 jenot: 0
 hhhh: 0
@@ -28,3 +32,6 @@ sdfs: 0
 dfgdf: 0
 fghfgsds: 0
 ghjliu: 0
+78uytytjh: 0
+no7yto8: 0
+86rfituykf: 0

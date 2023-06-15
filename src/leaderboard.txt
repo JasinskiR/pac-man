@@ -1,3 +1,4 @@
+olek: 800
 maslo: 500
 kalosze: 300
 aaa: 200
@@ -7,6 +8,7 @@ pi7tkfjh: 200
 gg: 100
 dgfdf: 100
 p97tfkhj: 100
+gowno: 100
 krowa: 0
 jenot: 0
 hhhh: 0

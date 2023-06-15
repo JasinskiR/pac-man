@@ -13,6 +13,11 @@ import java.util.List;
 
 import static src.App.initBoardWindow;
 
+/**
+ * @class Leaderboard
+ *
+ * @brief The Leaderboard class represents the leaderboard panel in the game.
+ */
 public class Leaderboard extends JPanel implements ActionListener {
 
     private int startY;
@@ -22,6 +27,9 @@ public class Leaderboard extends JPanel implements ActionListener {
 
     private final String leaderboardPath;
 
+    /**
+     * @brief Constructs a Leaderboard object.
+     */
     public Leaderboard(){
         setLayout(null);
 
@@ -45,6 +53,9 @@ public class Leaderboard extends JPanel implements ActionListener {
         add(startAgainButton);
     }
 
+    /**
+     * @brief Reads the leaderboard data from the file.
+     */
     private void readLeaderboard(){
         try {
             BufferedReader leaderboardReader = new BufferedReader(new FileReader(leaderboardPath));
@@ -68,6 +79,12 @@ public class Leaderboard extends JPanel implements ActionListener {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @brief Handles the button click event.
+     *
+     * @param e The action event object.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if ("play_again".equals(e.getActionCommand())){
@@ -77,6 +94,12 @@ public class Leaderboard extends JPanel implements ActionListener {
             initBoardWindow();
         }
     }
+
+    /**
+     * @brief Paints the leaderboard panel.
+     *
+     * @param g The graphics context.
+     */
     @Override
     public void paintComponent(Graphics g){
 //        super.paintComponent(g);

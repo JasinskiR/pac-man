@@ -14,12 +14,20 @@ import java.io.IOException;
 import static src.App.initBoardWindow;
 import static src.App.initLeaderboardWindow;
 
-class WelcomeScreen extends JPanel implements ActionListener {
+/**
+ * @class WelcomeScreen
+ *
+ * @brief The WelcomeScreen class represents the welcome screen panel in the game.
+ */
+public class WelcomeScreen extends JPanel implements ActionListener {
   private JButton startButton;
   private JButton leaderboardButton;
   private JButton exitButton;
   private BufferedImage backgroundImage;
 
+  /**
+   * @brief Constructs a WelcomeScreen object.
+   */
   public WelcomeScreen() {
     setLayout(new BorderLayout());
 
@@ -48,6 +56,13 @@ class WelcomeScreen extends JPanel implements ActionListener {
     add(buttonContainer, BorderLayout.SOUTH);
     setPreferredSize(new Dimension(backgroundImage.getWidth(), backgroundImage.getHeight()));
   }
+
+  /**
+   * @brief Creates a customized button.
+   *
+   * @param text The text to be displayed on the button.
+   * @return The created JButton object.
+   */
   private JButton createButton(String text) {
     JButton button = new JButton(text);
     button.setFont(button.getFont().deriveFont(Font.BOLD, 24f));
@@ -72,6 +87,11 @@ class WelcomeScreen extends JPanel implements ActionListener {
     return button;
   }
 
+  /**
+   * @brief Paints the welcome screen panel.
+   *
+   * @param g The graphics context.
+   */
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
@@ -80,6 +100,11 @@ class WelcomeScreen extends JPanel implements ActionListener {
     }
   }
 
+  /**
+   * @brief Handles the button click event.
+   *
+   * @param e The action event object.
+   */
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == startButton) {

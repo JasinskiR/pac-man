@@ -13,6 +13,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import static src.App.initLeaderboardWindow;
 
+/**
+ * @brief Board class serves as the central point in the programm. It stores all present entities,
+ * calculates entity collisions, draws the background, etc...
+ */
 public class Board extends JPanel implements ActionListener, KeyListener {
 
     // controls the delay between each tick in ms
@@ -53,6 +57,17 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     private String leaderboardPath;
 
+    /**
+     * @brief Constructs a new Board object.
+     *
+     * This constructor initializes the game board by performing the following tasks:
+     *  - Sets the preferred size of the board
+     *  - Creates a player object
+     *  - Initializes a list of ghosts
+     *  - Loads the leaderboard path
+     *  - Populates the board with coins
+     *  - Starts a timer to trigger action events
+     */
     public Board() {
         setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
         // initialize the game state
@@ -60,6 +75,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         ghosts = new ArrayList<MovingEntity>();
 
         ghosts.add(new WallhuggerGhost("assets/ghost_yellow.png", 200.0f, new Point(4, 4)));
+        ghosts.add(new WallhuggerGhost("assets/ghost_yellow.png", 200.0f, new Point(8, 8)));
         ghosts.add(new DijkstraGhost("assets/ghost_green.png", 200.0f, new Point(8, 8)));
         ghosts.add(new RandomGhost("assets/ghost_pink.png", 100.0f, new Point(8, 8)));
 
@@ -70,9 +86,26 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         timer = new Timer(DELAY, this); // call the actionPerformed() method every DELAY ms
         timer.start();
     }
+
+    /** @brief get player object
+     *
+     * @return player - Board's player instance
+     */
     public static Player getPlayer() {
         return player;
     }
+
+    /**
+     * @brief Handles the action event for a specific action.
+     *
+     * This method is called when an action event occurs, such as a button click.
+     * It performs the following tasks:
+     *  - Checks for entity collision
+     *  - Collects coins
+     *  - Repaints the graphical user interface
+     *
+     * @param e The action event that occurred.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         // this method is called by the timer every DELAY ms.
@@ -86,6 +119,21 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         repaint();
     }
 
+    /**
+     * @brief Overrides the paintComponent method of JPanel to customize the rendering of the game graphics.
+     *
+     * This method is responsible for painting the game components on the screen. It performs the following tasks:
+     *  - If the game is over, it draws the "Game Over" screen and returns.
+     *  - Calls the superclass's paintComponent method to perform default painting operations.
+     *  - Draws the background.
+     *  - Draws the score.
+     *  - Draws the coins.
+     *  - Draws the ghosts.
+     *  - Draws the player.
+     *  - Syncs the graphics to smooth out animations on some systems.
+     *
+     * @param g The Graphics object used for rendering.
+     */
     @Override
     public void paintComponent(Graphics g) {
 
@@ -115,11 +163,20 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         Toolkit.getDefaultToolkit().sync();
     }
 
+    /**
+     * @brief handles keys typed - this mehtod is overriden only because we must implement
+     * all methods being part of the KeyListener interface
+     * @param e the event to be processed
+     */
     @Override
     public void keyTyped(KeyEvent e) {
         // this is not used but must be defined as part of the KeyListener interface
     }
 
+    /**
+     * @brief delegate key presses to the player instance wherein they are handled
+     * @param e the event to be processed
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         // react to key down events
@@ -127,11 +184,25 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         player.keyPressed(e);
     }
 
+    /**
+     * @brief handles keys released - this mehtod is overriden only because we must implement
+     * all methods being part of the KeyListener interface
+     * @param e the event to be processed
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         // react to key up events
     }
 
+    /**
+     * @brief Draws the background of the game board.
+     *
+     * This method is responsible for drawing a checkered background on the game board.
+     * It iterates through each row and column of the board and determines the color of each tile based on the value in the MAP array.
+     * It then fills a square tile at the current row/column position with the determined color.
+     *
+     * @param g The Graphics object used for rendering.
+     */
     private void drawBackground(Graphics g) {
         // draw a checkered background
 
@@ -147,11 +218,14 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                         TILE_SIZE,
                         TILE_SIZE
                 );
-
             }
         }
     }
 
+    /**
+     * @brief draws user score on the screen
+     * @param g The Graphics object used for rendering.
+     */
     private void drawScore(Graphics g) {
         // set the text to be displayed
         String text = String.format("$%d", player.getScore());
@@ -184,6 +258,11 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         g2d.drawString(text, x, y);
     }
 
+    /**
+     * @breif draws the game over screen by destroying the current window and initialising the leaderboard
+     * @param g The Graphics object used for rendering.
+     * @param score player score
+     */
     private void drawGameOver(Graphics g, int score) {
         showLeaderboardForm(score);
 //        displayLeaderboard(g);
@@ -192,6 +271,10 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         initLeaderboardWindow();
     }
 
+    /**
+     * @brief renders a small form allowing the user to enter their username
+     * @param score user score
+     */
     private void showLeaderboardForm(int score) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Leaderboard");
@@ -228,6 +311,11 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         dialog.setVisible(true);
     }
 
+    /**
+     * @brief checks if the username provided by the player is alredy in the leaderboard
+     * @param playerName
+     * @return boolean whether the player is in the leaderboard
+     */
     private boolean isPlayerInLeaderboard(String playerName) {
         try {
             BufferedReader leaderboardReader = new BufferedReader(new FileReader(leaderboardPath));
@@ -246,6 +334,11 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         return false;
     }
 
+    /**
+     * @brief updates the leaderboard with new player score
+     * @param playerName name of the player
+     * @param score player score
+     */
     private void updateLeaderboard(String playerName, int score) {
         List<String> leaderboard = new ArrayList<>();
 
@@ -353,6 +446,11 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     }
 
 
+    /**
+     * @brief place coins on the board at random
+     *
+     * @return list of coins
+     */
     private ArrayList<Coin> populateCoins() {
         ArrayList<Coin> coinList = new ArrayList<Coin>();
         Random rand = new Random();
@@ -368,6 +466,15 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         return coinList;
     }
 
+    /**
+     * @brief Allows the player to collect coins.
+     *
+     * This method checks if the player's position matches the position of any coins on the board.
+     * If a match is found, the player's score is increased by the value of the collected coin,
+     * and the coin is added to a list of collected coins.
+     * After collecting the coins, they are removed from the board.
+     * If there are no more coins remaining on the board, new coins are populated.
+     */
     private void collectCoins() {
         // allow player to pickup coins
         ArrayList<Coin> collectedCoins = new ArrayList<>();
@@ -384,8 +491,15 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     }
 
-    //Collisions between entities (ghost and player) are handled by the board because it has the access
-    //to both player and ghost pos.
+
+    /**
+     * @brief Checks for collisions between the player and ghosts.
+     *
+     * This method iterates through each ghost in the list of ghosts.
+     * It compares the position of each ghost with the position of the player.
+     * If a collision is detected, the player's position is set to (0, 0) and the game is marked as over.
+     * This method is typically called to check for collisions between the player and ghosts during gameplay.
+     */
     private void checkEntityCollision(){
         for (MovingEntity ghost : ghosts){
             if (ghost.getPos().equals(player.getPos())){
@@ -395,6 +509,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * @breif signal that the game has finished and stop the timer
+     */
     private void gameOver(){
         timer.stop();
         is_gameOver = true;

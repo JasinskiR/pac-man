@@ -5,16 +5,31 @@ import src.Board;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * @class WallhuggerGhost
+ *
+ * @brief The WallhuggerGhost class represents a ghost that follows a wall-hugging movement logic.
+ */
+
 public class WallhuggerGhost extends MovingEntity{
 
     private Point lastMove;
+
+    /**
+     * @brief Constructs a WallhuggerGhost object with the specified image path, speed, and starting position.
+     *
+     * @param imagePath The path to the image representing the ghost.
+     * @param speed     The speed of the ghost.
+     * @param startPos  The starting position of the ghost.
+     */
     public WallhuggerGhost(String imagePath, float speed, Point startPos) {
         super(speed, startPos);
         setSprite(imagePath);
-//        lastMove = new Point(0,0);
     }
 
-    //this algo will make the ghost prefer outter walls.
+    /**
+     * @brief The Move() method determines the movement logic for the Wallhugger ghost.
+     */
     @Override
     protected void Move() {
         ArrayList<Point> possibleRelDirection = new ArrayList<Point>(); //possible relative directions
@@ -75,6 +90,5 @@ public class WallhuggerGhost extends MovingEntity{
 
         pos.translate(direction.x, direction.y);
         checkWallCollision(direction);
-//        System.out.println("------");
     }
 }

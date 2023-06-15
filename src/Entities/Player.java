@@ -12,23 +12,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
+/**
+ * @class Player
+ *
+ * @brief The Player class represents the player entity in a game. It inherits from the MovingEntity class.
+ */
 public class Player extends MovingEntity {
 
     // keep track of the player's score
     private int score;
 
+    /**
+     * Constructs a Player object with the specified speed and starting position.
+     *
+     * @param speed    The speed at which the player moves.
+     * @param startPos The starting position of the player.
+     */
     public Player(float speed, Point startPos) { //what if player had a list of ghosts to detect?
         super(speed, startPos);
         loadImage();
         score = 0;
     }
 
+    /**
+     * Moves the player based on the current direction. It updates the player's position and checks for wall collisions.
+     */
     @Override
     protected void Move() {
         pos.translate(direction.x, direction.y);
         checkWallCollision(direction);
     }
 
+    /**
+     * Loads the player's image from a file.
+     */
     private void loadImage() {
         try {
             // you can use just the filename if the image file is in your
@@ -39,6 +56,11 @@ public class Player extends MovingEntity {
         }
     }
 
+    /**
+     * Handles the player's keyboard input.
+     *
+     * @param e The KeyEvent representing the key press event.
+     */
     public void keyPressed(KeyEvent e) {
         // every keyboard get has a certain code. get the value of that code from the
         // keyboard event so that we can compare it to KeyEvent constants
@@ -65,18 +87,38 @@ public class Player extends MovingEntity {
         // this gets called once every tick, before the repainting process happens.
     }
 
+    /**
+     * Returns the score of the player.
+     *
+     * @return The player's score.
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Increases the player's score by the specified amount.
+     *
+     * @param amount The amount to increase the player's score by.
+     */
     public void addScore(int amount) {
         score += amount;
     }
 
+    /**
+     * Returns the position of the player.
+     *
+     * @return The player's position as a Point object.
+     */
     public Point getPos() {
         return pos;
     }
 
+    /**
+     * Sets the position of the player.
+     *
+     * @param newPos The new position of the player as a Point object.
+     */
     public void setPos(Point newPos) {
         pos = newPos;
     }

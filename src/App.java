@@ -4,8 +4,19 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @brief The main application class.
+ *
+ * This class contains the main method and initializes different windows/screens of the application.
+ */
 class App {
 
+    /**
+     * @brief Initializes the main window of the application.
+     *
+     * This method creates a window frame, sets the title, and adds a JPanel to draw on.
+     * It also sets up keyboard input handling and configures the window properties.
+     */
     private static void initWindow() {
         // create a window frame and set the title in the toolbar
         JFrame window = new JFrame("Ale to juz nie jest smieszne");
@@ -32,6 +43,11 @@ class App {
 
     }
 
+    /**
+     * @brief Initializes the welcome window of the application.
+     *
+     * This method creates a window frame for the welcome screen and configures its properties.
+     */
     private static void initWelcomeWindow() {
         JFrame welcomeFrame = new JFrame("Pacman");
         welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,6 +61,11 @@ class App {
         welcomeFrame.setVisible(true);
     }
 
+    /**
+     * @brief Initializes the board window of the application.
+     *
+     * This method creates a window frame for the game board and configures its properties.
+     */
     static void initBoardWindow() {
         JFrame boardFrame = new JFrame("Pacman");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,6 +80,11 @@ class App {
         boardFrame.setVisible(true);
     }
 
+    /**
+     * @brief Initializes the leaderboard window of the application.
+     *
+     * This method creates a window frame for the leaderboard screen and configures its properties.
+     */
     static void initLeaderboardWindow(){
         JFrame leaderboardFrame = new JFrame("Leaderboard");
         leaderboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,6 +98,10 @@ class App {
         leaderboardFrame.setVisible(true);
     }
 
+    /**
+     * @breif program's main method - starts by initialising the WelcomeWindow
+     * @param args
+     */
     public static void main(String[] args) {
         // invokeLater() is used here to prevent our graphics processing from
         // blocking the GUI. https://stackoverflow.com/a/22534931/4655368

@@ -9,10 +9,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * @brief DijkstraGhost class represents a ghost character that uses Dijkstra's algorithm to calculate the shortest path to the player.
+ *
+ * This class extends the MovingEntity class and implements the movement behavior specific to a DijkstraGhost.
+ */
 public class DijkstraGhost extends MovingEntity {
     private List<Point> shortestPath;
     private Queue<Point> pathQueue;
 
+    /**
+     * @brief Constructs a DijkstraGhost object with the specified image path, speed, and starting position.
+     *
+     * @param imagePath The path to the image representing the ghost.
+     * @param speed The speed of the ghost.
+     * @param startPos The starting position of the ghost.
+     */
     public DijkstraGhost(String imagePath, float speed, Point startPos) {
         super(speed, startPos);
         setSprite(imagePath);
@@ -20,6 +32,12 @@ public class DijkstraGhost extends MovingEntity {
         pathQueue = new LinkedList<>();
     }
 
+    /**
+     * @brief Moves the ghost according to Dijkstra's algorithm.
+     *
+     * This method calculates the shortest path to the player using Dijkstra's algorithm.
+     * It updates the ghost's position based on the calculated path and handles collisions with walls.
+     */
     @Override
     protected void Move() {
         if (!pathQueue.isEmpty()) {
@@ -51,6 +69,11 @@ public class DijkstraGhost extends MovingEntity {
 
 
 
+    /**
+     * @brief Calculates the shortest path to the player using Dijkstra's algorithm.
+     *
+     * This method calculates the shortest path to the player using Dijkstra's algorithm and updates the shortestPath list accordingly.
+     */
     private void calculateShortestPath() {
         int[][] distance = new int[Board.ROWS][Board.COLUMNS];
         Point[][] previous = new Point[Board.ROWS][Board.COLUMNS];

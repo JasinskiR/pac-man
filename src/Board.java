@@ -23,25 +23,27 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     public static final int DELAY = 50;
     // controls the size of the board
     public static final int TILE_SIZE = 25;
-    public static final int ROWS = 15;
-    public static final int COLUMNS = 15;
 
     // 0 - path, 1 - wall
     public static final int MAP [] [] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0},
-                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
-                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
-                                         {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
-                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-                                         {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
-                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
-                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
-                                         {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1},
-                                         {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-                                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+            {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+            {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1},
+            {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+
+    public static final int ROWS = MAP.length;
+    public static final int COLUMNS = MAP[0].length;;
 
     // controls how many coins appear on the board
     public static final int NUM_COINS = 5;
@@ -100,23 +102,22 @@ public class Board extends JPanel implements ActionListener, KeyListener {
      *
      * This method is called when an action event occurs, such as a button click.
      * It performs the following tasks:
-     *  - Checks for entity collision
      *  - Collects coins
      *  - Repaints the graphical user interface
+     *  - Checks for entity collision
      *
      * @param e The action event that occurred.
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        // this method is called by the timer every DELAY ms.
-        // use this space to update the state of your game or animation
-        // before the graphics are redrawn.
-        checkEntityCollision();
         // give the player points for collecting coins
         collectCoins();
         // calling repaint() will trigger paintComponent() to run again,
         // which will refresh/redraw the graphics.
         repaint();
+        // this method is called by the timer every DELAY ms.
+        // use this space to update the state of your game or animation
+        checkEntityCollision();
     }
 
     /**

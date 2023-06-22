@@ -51,7 +51,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
 
-    private Timer timer;
+    private static Timer timer;
     private static Player player;
     private ArrayList<Coin> coins;
     private ArrayList<MovingEntity> ghosts;
@@ -110,14 +110,14 @@ public class Board extends JPanel implements ActionListener, KeyListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        // give the player points for collecting coins
-        collectCoins();
         // calling repaint() will trigger paintComponent() to run again,
         // which will refresh/redraw the graphics.
         repaint();
+        // give the player points for collecting coins
+        collectCoins();
         // this method is called by the timer every DELAY ms.
         // use this space to update the state of your game or animation
-        checkEntityCollision();
+//        checkEntityCollision();
     }
 
     /**
@@ -139,6 +139,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     public void paintComponent(Graphics g) {
 
         if (is_gameOver){
+            timer.stop();
             drawGameOver(g, player.getScore());
             return;
         }
@@ -158,11 +159,21 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         for (MovingEntity ghost : ghosts){
             ghost.draw(g, this);
         }
+        /**
+         * The placement of cEC here is important - to avoid dodges, where neighbouring
+         * entities drive into eachother, yet no collision occurs, we need to first
+         * move all the ghosts, then check whether they collided with anything, then
+         * move the player. This solves the dodge issue.
+         */
+        checkEntityCollision();
+
         player.draw(g, this);
 
         // this smooths out animations on some systems
         Toolkit.getDefaultToolkit().sync();
     }
+
+
 
     /**
      * @brief handles keys typed - this mehtod is overriden only because we must implement

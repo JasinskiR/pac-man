@@ -10,6 +10,8 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import javax.imageio.ImageIO;
 
 /**
@@ -39,7 +41,9 @@ public class Player extends MovingEntity {
      */
     @Override
     protected void Move() {
+
         pos.translate(direction.x, direction.y);
+
         checkWallCollision(direction);
     }
 

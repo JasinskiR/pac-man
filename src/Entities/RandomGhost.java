@@ -61,7 +61,9 @@ public class RandomGhost extends MovingEntity {
             }
             moveDuration = 3;
         }
+
         pos.translate(direction.x, direction.y);
+
         checkWallCollision(direction);
     }
 }

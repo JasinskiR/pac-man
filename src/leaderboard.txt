@@ -1,14 +1,29 @@
+olek15-6_2: 5100
+1900: 1900
+aleksander: 1700
+olek15-6: 1400
+olek1234: 1300
 olek: 800
+olek2: 800
 maslo: 500
+bomber: 500
+guzik: 500
+gamer1: 500
+ghadf: 400
+gary: 400
 kalosze: 300
+ads: 300
 aaa: 200
 uuuh: 200
 kato: 200
 pi7tkfjh: 200
+mouse: 200
 gg: 100
 dgfdf: 100
 p97tfkhj: 100
 gowno: 100
+gamer12: 100
+dgrdz ttvs: 100
 krowa: 0
 jenot: 0
 hhhh: 0
@@ -37,3 +52,5 @@ ghjliu: 0
 78uytytjh: 0
 no7yto8: 0
 86rfituykf: 0
+gamer1231: 0
+whywontyou: 0

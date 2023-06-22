@@ -93,7 +93,7 @@ public abstract class MovingEntity {
      * @param position possition at which to check for collision
      * @return collided whether the position results in a collision
      */
-    protected  boolean checkWallCollisionAbsolute(Point position){
+    protected boolean checkWallCollisionAbsolute(Point position){
         boolean collided = false;
 
         if (position.x < 0) collided = true;
@@ -143,5 +143,11 @@ public abstract class MovingEntity {
         return pos;
     }
 
-
 }
+
+/**
+ * How to thread
+ * Dorob synchronizacje wątków
+ * Zsynchronizuj pozycje bytów
+ * Rozdrobnij kod - DRY
+ * */

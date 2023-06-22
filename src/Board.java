@@ -313,7 +313,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     /**
      * @brief checks if the username provided by the player is alredy in the leaderboard
-     * @param playerName
+     * @param playerName player name
      * @return boolean whether the player is in the leaderboard
      */
     private boolean isPlayerInLeaderboard(String playerName) {
@@ -503,7 +503,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private void checkEntityCollision(){
         for (MovingEntity ghost : ghosts){
             if (ghost.getPos().equals(player.getPos())){
-                player.setPos(new Point(0, 0));
+//                player.setPos(new Point(0, 0));
                 gameOver();
             }
         }

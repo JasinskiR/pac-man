@@ -88,7 +88,9 @@ public class WallhuggerGhost extends MovingEntity{
          * bother to fix that.
          */
 
+
         pos.translate(direction.x, direction.y);
+
         checkWallCollision(direction);
     }
 }

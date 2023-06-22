@@ -66,7 +66,7 @@ class App {
      *
      * This method creates a window frame for the game board and configures its properties.
      */
-    static void initBoardWindow() {
+    public static void initBoardWindow() {
         JFrame boardFrame = new JFrame("Pacman");
         boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         boardFrame.setResizable(false);
@@ -85,7 +85,7 @@ class App {
      *
      * This method creates a window frame for the leaderboard screen and configures its properties.
      */
-    static void initLeaderboardWindow(){
+    public static void initLeaderboardWindow(){
         JFrame leaderboardFrame = new JFrame("Leaderboard");
         leaderboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         leaderboardFrame.setResizable(false);

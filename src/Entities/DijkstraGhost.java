@@ -48,7 +48,9 @@ public class DijkstraGhost extends MovingEntity {
             // Check for collision before updating position
             if (!checkWallCollision(direction)) {
                 // Update position if there is no collision
+
                 pos.setLocation(nextPos);
+
             }
 
             if (pos.equals(nextPos)) {
@@ -65,8 +67,6 @@ public class DijkstraGhost extends MovingEntity {
         pathQueue.addAll(shortestPath);
         pathQueue.poll(); // Skip the first position (current position)
     }
-
-
 
 
     /**
